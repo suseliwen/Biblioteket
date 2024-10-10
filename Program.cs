@@ -18,8 +18,7 @@ class Program
     public static void Main()
     {
         bool isRunning = true;
-        Library library = new Library();
-        
+        Library library = new Library();        
 
         System.Console.WriteLine("Välkommen till programmet för hantering av biblioteksböcker");
 
@@ -43,29 +42,28 @@ class Program
             switch(input)
             {
                 case 1:
-                    System.Console.WriteLine("Lägg till bok: ");
                     library.AddBook();
-                    System.Console.WriteLine("");
                     break;
                 
                 case 2:
-                    System.Console.WriteLine("Det här är val nr 2 - ta bort en bok");
                     System.Console.WriteLine("Skriv in ISBN-nummer på den bok du vill ta bort");
-                    int isbn = int.Parse(Console.ReadLine());
-                    library.RemoveBook(isbn);                    
-                    System.Console.WriteLine("");
-                    break;
+                    if (int.TryParse(Console.ReadLine(), out int isbn))
+                    {
+                        library.RemoveBook(isbn); 
+                    }
+                    else
+                    {
+                        System.Console.WriteLine("Du har angett ett felaktigt isbn-nr");                        
+                    }  
+                    break;              
 
                 case 3:
-                    System.Console.WriteLine("Skriv ut samtliga böcker i biblioteket");
-                    library.PrintBooks();
-                    System.Console.WriteLine("");
+                    library.PrintBooks();                   
                     break;
                 
                 case 4:
                     isRunning = false;
-                    System.Console.WriteLine("Tack för idag!");
-                    System.Console.WriteLine("");
+                    System.Console.WriteLine("Tack för idag!");                   
                     break;
 
                 default:
@@ -131,8 +129,7 @@ public class Library
         {
             System.Console.WriteLine($"Ingen bok med ISBN {numIsbn} hittades. ");
         }     
-    }
-    
+    }    
     
     public void PrintBooks()
     {
