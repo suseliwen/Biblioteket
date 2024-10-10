@@ -10,11 +10,16 @@ Lägga till en bok genom att mata in titel, författare och ISBN.
 Ta bort en bok baserat på ISBN.
 Visa alla böcker i biblioteket.*/
 
-class Programmet
+using System.Dynamic;
+using System.Security.Cryptography.X509Certificates;
+
+class Program
 {
     public static void Main()
     {
         bool isRunning = true;
+        Library library = new Library();
+        
 
         System.Console.WriteLine("Välkommen till programmet för hantering av biblioteksböcker");
 
@@ -38,17 +43,22 @@ class Programmet
             switch(input)
             {
                 case 1:
-                    System.Console.WriteLine("Det här är val nr 1 - lägg till en bok");
+                    System.Console.WriteLine("Lägg till bok: ");
+                    library.AddBook();
                     System.Console.WriteLine("");
                     break;
                 
                 case 2:
                     System.Console.WriteLine("Det här är val nr 2 - ta bort en bok");
+                    System.Console.WriteLine("Skriv in ISBN-nummer på den bok du vill ta bort");
+                    int isbn = int.Parse(Console.ReadLine());
+                    library.RemoveBook(isbn);                    
                     System.Console.WriteLine("");
                     break;
 
                 case 3:
-                    System.Console.WriteLine("Det här är val nr 3 - skriv ut samtliga böcker i biblioteket");
+                    System.Console.WriteLine("Skriv ut samtliga böcker i biblioteket");
+                    library.PrintBooks();
                     System.Console.WriteLine("");
                     break;
                 
@@ -66,8 +76,69 @@ class Programmet
 
         }
 
-
     }
 
+}
 
+public class Book
+{
+    public string Title {get; set;}
+    public string Author {get; set;}
+    public int NumISBN {get; set;}
+
+    public Book (string title, string author, int numIsbn)
+    {
+        Title = title;
+        Author = author;
+        NumISBN = numIsbn;
+    }
+
+    public void ShowInfo()
+    {
+        System.Console.WriteLine($"Titel: {Title} Författare: {Author} ISBN: {NumISBN}");
+    }
+}
+
+public class Library
+{
+    List<Book>books = new List<Book>();
+
+    public void AddBook()
+    {
+        System.Console.Write("Skriv in författare: ");
+        string author = Console.ReadLine();
+        System.Console.Write("Skriv in titel: ");
+        string title = Console.ReadLine();
+        System.Console.Write("Skriv in bokens ISBN-nummer: ");
+        int numIsbn = int.Parse(Console.ReadLine());
+
+        Book book = new Book(title, author, numIsbn);
+        books.Add(book);
+        System.Console.WriteLine($"Boken {title} har nu lagts till i biblioteket.");      
+      
+    }
+
+    public void RemoveBook(int numIsbn)
+    {
+       
+        Book bookToRemove = books.FirstOrDefault(b => b.NumISBN == numIsbn);
+        if (bookToRemove != null)
+        {
+            books.Remove(bookToRemove);
+            System.Console.WriteLine($"Boken med ISBN-nr {numIsbn} har tagits bort från biblioteket. ");
+        }
+        else
+        {
+            System.Console.WriteLine($"Ingen bok med ISBN {numIsbn} hittades. ");
+        }     
+    }
+    
+    
+    public void PrintBooks()
+    {
+        foreach(Book book in books)
+        {
+            book.ShowInfo();
+        }
+    }
 }
